@@ -109,6 +109,52 @@ distill:
 - **给 Agent 用**：把 `skills/` 目录接入 Claude Code / Codex / WorkBuddy 等 Agent 框架，
   让 AI 带着这本书的方法论回答问题，而不是泛泛而谈。相当于给 AI 请了一位「读过这本书的领域专家」。
 
+## 真实案例 · 王川宝典
+
+> 用 distillkit 把 75 篇王川博客转成一组可调用的方法论技能卡，整个过程不到一杯咖啡的时间。
+
+**输入**：从 `chuan.us` 同源资料抓取 75 篇文章，合并成约 627 KB 的 `corpus/wangchuan_corpus.txt`。
+
+**配置**：
+
+```yaml
+llm:
+  base_url: https://api.deepseek.com/v1
+  model: deepseek-chat
+distill:
+  top_k: 12
+  language: zh
+```
+
+**产物**（`distilled-wangchuan/认知跃迁与指数增长：在复杂世界中构建优势的思维框架/`）：
+
+- 12 张技能卡，覆盖「认知升级 → 增长引擎 → 竞争分析 → 风险控制 → 行动跃迁」五大阶段
+- `BOOK_OVERVIEW.md` 全书一句话总结 + 核心论点 + 结构
+- `INDEX.md` 技能全景图 + 推荐学习顺序
+- `flashcards.md` 复习卡片
+- `action-checklist.md` 行动清单
+
+**12 张技能卡一览**（按推荐学习顺序）：
+
+| # | 阶段 | 技能卡 | 解决的核心问题 |
+| --- | --- | --- | --- |
+| ① | 认知基础 | 信息杠杆与跨学科阅读策略 | 如何用最低成本获取前人经验 |
+| ② | 认知修正 | 季度认知复盘盘 | 如何识别并纠正系统性思维盲点 |
+| ③ | 增长引擎 | 正反馈循环识别与构建法 | 如何识别并构建自我强化的增长飞轮 |
+| ④ | 增长评估 | 指数增长评估法 | 如何区分时间泥潭与复利引擎 |
+| ⑤ | 竞争分析 | 波色-爱因斯坦凝聚态市场分析框架 | 如何判断市场是赢家通吃还是分散 |
+| ⑥ | 风险控制 | 反脆弱性三要素评估 | 系统在不确定性中能否不仅存活 |
+| ⑦ | 风险控制 | 选择权优先原则 | 如何始终让自己有多个选择 |
+| ⑧ | 行动跃迁 | 渐进式屁股移动法 | 如何克服确认偏见，让认知变现 |
+| ⑨ | 行动跃迁 | 抽象化者定位策略 | 如何从被动执行者转变为规则制定者 |
+| ⑩ | 网络杠杆 | 弱关系网络价值挖掘 | 如何获取非冗余信息和意外机会 |
+| ⑪ | 行动策略 | 随机梯度下降生活优化 | 如何用小步试错替代完美规划 |
+| … | (略) | … | … |
+
+**适用场景**：投资决策 / 个人成长 / 健康管理 / 职场跃迁 —— 任何想深挖某位高手方法论的领域都能用。
+
+<a href="./docs/case-wangchuan.png"><img src="./docs/case-wangchuan.png" alt="用 distillkit 蒸馏王川宝典的实战截图" width="100%"></a>
+
 ## 五阶蒸馏法（管线）
 
 1. **通读（Survey）**：把长文切片，逐片提取要点，再汇总成全局理解。
@@ -219,6 +265,52 @@ Env vars: `DISTILL_API_KEY` / `DISTILL_BASE_URL` / `DISTILL_MODEL` / `DISTILL_TO
 - **For Agents**: wire the `skills/` directory into Claude Code / Codex / WorkBuddy etc., so the AI
   answers with the book's methodology instead of generic advice — like hiring a "domain expert who
   actually read the book".
+
+## Real case study · Wangchuan's corpus
+
+> Distilling 75 of Wangchuan's essays into a callable methodology pack takes about as long as brewing a coffee.
+
+**Input**: 75 essays fetched from `chuan.us`, merged into a single 627 KB corpus file (`corpus/wangchuan_corpus.txt`).
+
+**Config**:
+
+```yaml
+llm:
+  base_url: https://api.deepseek.com/v1
+  model: deepseek-chat
+distill:
+  top_k: 12
+  language: zh
+```
+
+**Output** (`distilled-wangchuan/认知跃迁与指数增长：在复杂世界中构建优势的思维框架/`):
+
+- 12 skill cards spanning 5 stages: `认知升级 → 增长引擎 → 竞争分析 → 风险控制 → 行动跃迁`
+- `BOOK_OVERVIEW.md` — one-liner + core thesis + structure
+- `INDEX.md` — skill panorama + recommended order
+- `flashcards.md` — review cards
+- `action-checklist.md` — actionable checklist
+
+**12 skill cards at a glance** (in recommended order):
+
+| # | Stage | Skill card | Core question it answers |
+| --- | --- | --- | --- |
+| ① | Cognition basics | Information leverage & cross-disciplinary reading | How to access predecessors' experience at minimum cost |
+| ② | Cognition fix | Quarterly cognitive review | How to spot and correct systematic blind spots |
+| ③ | Growth engine | Positive-feedback loop detection & construction | How to identify and build self-reinforcing flywheels |
+| ④ | Growth eval | Exponential-growth evaluation | How to tell time-sinks from compounding engines |
+| ⑤ | Competition analysis | BEC market-state analysis framework | Winner-takes-all vs. fragmented: which market are you in? |
+| ⑥ | Risk control | Antifragility three-factor evaluation | Will the system not just survive, but benefit from uncertainty? |
+| ⑦ | Risk control | Optionality-first principle | How to always keep multiple choices open |
+| ⑧ | Action leap | Gradual-ass-moving method | How to overcome confirmation bias and ship cognition |
+| ⑨ | Action leap | Abstraction-positioning strategy | How to shift from executor to rule-maker |
+| ⑩ | Network leverage | Weak-tie network value mining | How to get non-redundant info and surprise opportunities |
+| ⑪ | Action strategy | SGD-style life optimization | Small-step trial-and-error vs. perfect planning |
+| … | (more) | … | … |
+
+**Use it for**: investing, personal growth, health, career leapfrogs — any domain where you want to extract one expert's hard-won methodology.
+
+<a href="./docs/case-wangchuan.png"><img src="./docs/case-wangchuan.png" alt="Screenshot: distillkit distillation of the Wangchuan corpus" width="100%"></a>
 
 ## The five-stage pipeline
 
