@@ -1,3 +1,14 @@
+# distillkit · 知识蒸馏工具 / Knowledge Distiller
+
+> [中文](#中文) · [English](#english)
+>
+> 把一本书 / 一个视频 / 任意长文本，**蒸馏**成一组可被 AI 和人直接复用的结构化知识包。
+> Turn a book / a video / any long text into a structured **knowledge pack** of reusable skills.
+
+---
+
+<a id="中文"></a>
+
 # distillkit · 知识蒸馏工具
 
 > 把一本书 / 一个视频 / 任意长文本，**蒸馏**成一组可被 AI 和人直接复用的结构化知识包。
@@ -8,8 +19,6 @@
 
 本仓库是这一思想的**开源、可自托管实现**：你用自己的 API Key，在你的机器上跑，资料不出本地。
 （与仓颉 Skill 是不同项目，提示词与管线均为原创实现。）
-
----
 
 ## 它能做什么
 
@@ -30,7 +39,7 @@
 需要 Python 3.10+。
 
 ```bash
-git clone https://github.com/<你的用户名>/distill-kit.git
+git clone https://github.com/input-output-x/distill-kit.git
 cd distill-kit
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
@@ -53,11 +62,8 @@ distill video 演讲字幕.txt
 
 # 4) 蒸馏一段文本
 echo "这里是一段方法论丰富的文字……" | distill text -
-```
 
-不想配 Key 也能看效果：
-
-```bash
+# 不想配 Key 也能看效果：
 distill book 示例.txt --mock --output-dir ./distilled
 ```
 
@@ -109,4 +115,115 @@ distill:
 
 ## 许可证
 
-[MIT](./LICENSE)
+[MIT](./LICENSE) · 仅英文文档见 [README.en.md](./README.en.md)
+
+---
+
+<a id="english"></a>
+
+# distillkit · Knowledge Distiller
+
+> Turn a book / a video / any long text into a structured **knowledge pack** of reusable skills.
+
+"Distillation" here follows the idea popularized by kangarooking's **Cangjie Skill**: a general LLM
+often answers with a "something's missing" feeling because it hasn't read the material that is
+*new to the model but valuable to you*. Distillation extracts the methodologies, frameworks,
+principles and mental models from that material into callable "skill cards".
+
+This repo is an **open-source, self-hostable implementation** of that idea — your API key, your
+machine, your data stays local. (Distinct from Cangjie Skill; prompts and pipeline are original.)
+
+## What it produces
+
+| File | Content |
+| --- | --- |
+| `BOOK_OVERVIEW.md` | Global understanding: one-liner, core thesis, structure, key topics |
+| `INDEX.md` | Skill panorama + recommended order + usage |
+| `skills/*.md` | Executable skill cards (Agent-Skill compatible) |
+| `flashcards.md` | Q&A review cards |
+| `action-checklist.md` | Actionable checklist |
+| `rejected.md` | Rejected candidates + reasons |
+| `distill.meta.json` | Run metadata |
+
+## Install
+
+Requires Python 3.10+.
+
+```bash
+git clone https://github.com/input-output-x/distill-kit.git
+cd distill-kit
+python -m venv .venv && source .venv/bin/activate
+pip install -e .
+# For PDF / EPUB support:
+pip install pypdf ebooklib beautifulsoup4
+```
+
+## Quick start
+
+```bash
+# 1) Generate a sample config
+distill --init
+# 2) Set your API key, then distill a book
+export DISTILL_API_KEY=sk-xxx
+distill book my-book.pdf --output-dir ./distilled
+# 3) Distill a video (prepare transcript/subtitle text first)
+distill video transcript.txt
+# 4) Distill arbitrary text
+echo "some methodology-rich text..." | distill text -
+# See it work without a key:
+distill book sample.txt --mock --output-dir ./distilled
+```
+
+## Inputs
+
+| Type | Command | Notes |
+| --- | --- | --- |
+| Book | `distill book file` | `.txt` `.md` `.pdf` (needs pypdf) `.epub` (needs ebooklib) |
+| Video | `distill video subs.txt` | Transcript/subtitle text; transcribe online videos with yt-dlp/whisper first |
+| Text | `distill text -` | Any text from stdin or args |
+
+> Why not download videos/articles inside the tool? Ingestion (especially image-heavy PDFs, paid
+> content) is best left under your control. The tool only does "text → knowledge pack": clean,
+> controllable, auditable.
+
+## Models
+
+distillkit is compatible with **any OpenAI Chat Completions endpoint**, so OpenAI / DeepSeek /
+Qwen / GLM / local llama.cpp / vLLM all work. Configure in `distill.yaml` or env vars:
+
+```yaml
+llm:
+  base_url: https://api.deepseek.com/v1
+  api_key: sk-xxx
+  model: deepseek-chat
+distill:
+  top_k: 12          # how many skill cards to keep
+  language: en       # zh / en
+  chunk_chars: 6000  # chunk size for long text
+  output_dir: ./distilled
+```
+
+Env vars: `DISTILL_API_KEY` / `DISTILL_BASE_URL` / `DISTILL_MODEL` / `DISTILL_TOP_K` / `DISTILL_LANGUAGE`.
+
+> Tip: distillation can use a lot of tokens. Try a cheap Flash model first; for image-rich material
+> prefer a model/client that can read images.
+
+## How to use the output
+
+- **For humans**: read `INDEX.md` first, then follow the relevant `skills/<name>.md`; review with
+  `flashcards.md` and act with `action-checklist.md`.
+- **For Agents**: wire the `skills/` directory into Claude Code / Codex / WorkBuddy etc., so the AI
+  answers with the book's methodology instead of generic advice — like hiring a "domain expert who
+  actually read the book".
+
+## The five-stage pipeline
+
+1. **Survey** — split long text into chunks, extract key points per chunk, then synthesize a global understanding.
+2. **Extract** — list candidate knowledge units worth distilling from the global understanding.
+3. **Filter** — keep the top_k most valuable units; give a rejection reason for the rest.
+4. **Crystallize** — write each kept unit as a skill card (trigger / steps / principles / examples / anti-patterns).
+5. **Compile** — generate the index, review cards, and action checklist.
+
+## License
+
+[MIT](./LICENSE) · 中文文档见 [README.md](./README.md)
