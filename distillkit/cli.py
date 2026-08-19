@@ -72,6 +72,12 @@ def main(argv=None) -> int:
         if args.kind == "text":
             content = args.content
             if content == "-":
+                # Windows 下 sys.stdin 默认用控制台代码页（如 cp936），管道传入
+                # 的 UTF-8 文本会乱码；统一重配置为 utf-8 以保证跨平台一致。
+                try:
+                    sys.stdin.reconfigure(encoding="utf-8")
+                except (AttributeError, ValueError):
+                    pass
                 content = sys.stdin.read()
             text = content
             source_name = "stdin-text"

@@ -8,12 +8,25 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+# Windows 保留设备名：用作文件名会在 mkdir 时直接报错，需要兜底
+_RESERVED_NAMES = {
+    "con", "prn", "aux", "nul",
+    "com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9",
+    "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9",
+}
+
+
 def slugify(text: str) -> str:
     text = (text or "untitled").strip().lower()
     text = re.sub(r"[\s]+", "-", text)
+    # 去掉 Windows 不允许出现在文件名里的字符（\:*?"<>| 等）；
+    # 中文（\u4e00-\u9fff）与连字符保留，其余一律剔除。
     text = re.sub(r"[^a-z0-9\u4e00-\u9fff\-]", "", text)
-    text = re.sub(r"-+", "-", text).strip("-")
-    return text or "untitled"
+    text = re.sub(r"-+", "-", text).strip("-").strip(".")
+    text = text or "untitled"
+    if text in _RESERVED_NAMES:
+        text = f"{text}-distilled"
+    return text
 
 
 def write(result: dict, out_dir: str, cfg) -> Path:

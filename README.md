@@ -1,3 +1,7 @@
+[![CI](https://github.com/input-output-x/distill-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/input-output-x/distill-kit/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)](https://www.python.org)
+
 # distillkit · 知识蒸馏工具 / Knowledge Distiller
 
 > [中文](#中文) · [English](#english)
