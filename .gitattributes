@@ -1,0 +1,2 @@
+# 让中文文件名在跨平台 checkout 时也能正确显示
+* text=auto eol=lf

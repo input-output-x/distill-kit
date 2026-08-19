@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-08-19T14:12:09.980355+00:00",
+  "source": "tests/fixtures/sample.txt",
+  "kind": "book",
+  "language": "zh",
+  "model": "gpt-4o-mini",
+  "title": "示例书（MOCK 演示）",
+  "skill_count": 3,
+  "kept_ids": [
+    "c1",
+    "c2",
+    "c3"
+  ]
+}
